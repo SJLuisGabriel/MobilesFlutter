@@ -1,16 +1,16 @@
 # progmsn2024
 
-A new Flutter project.
+### Practica 2: Screen Profile
 
-## Getting Started
+Fecha de vencimiento: 15 de septiembre de 2024, 22:59
 
-This project is a starting point for a Flutter application.
+## Descripción
 
-A few resources to get you started if this is your first Flutter project:
+Esta practica es una aplicación móvil desarrollada en Flutter como parte de las actividades del curso. El objetivo es implementar una serie de pantallas interactivas, utilizando nuevos widgets y tecnologías, con un enfoque en la creación de un perfil de usuario dinámico.
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
+## Características
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+- **Pantalla de Perfil**: Captura y edición de datos del perfil, incluyendo imagen, nombre completo, correo electrónico, número de teléfono y página de GitHub.
+- **Selección de Imagen**: Permite seleccionar una imagen desde la cámara o la galería del dispositivo.
+- **Interacción con Otras Aplicaciones**: Integración con otras aplicaciones para gestionar correos, llamadas y visitas a sitios web (GitHub).
+- **Widgets Personalizados**: Uso de nuevos widgets para mejorar la presentación y funcionalidad de la aplicación.
