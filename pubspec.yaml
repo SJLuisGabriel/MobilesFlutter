@@ -36,9 +36,11 @@ dependencies:
   cupertino_icons: ^1.0.8
   convex_bottom_bar: ^3.2.0
   flutter_expandable_fab: ^2.2.0
-  image_picker: ^0.8.4+3
+  image_picker: ^1.1.2
   url_launcher: ^6.0.9
   auto_size_text_field: ^2.2.4
+  sqflite: ^2.3.3+1
+  path_provider: ^2.1.4
 
 dev_dependencies:
   flutter_test:

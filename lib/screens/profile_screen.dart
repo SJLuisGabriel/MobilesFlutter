@@ -1,4 +1,3 @@
-import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 
@@ -10,7 +9,7 @@ class ProfileScreen extends StatefulWidget {
 }
 
 class _ProfileScreenState extends State<ProfileScreen> {
-  File? _image;
+  XFile? _image; // Usamos XFile y evitamos dart:io
   final ImagePicker _picker = ImagePicker();
 
   // Controladores para los campos de texto
@@ -19,31 +18,25 @@ class _ProfileScreenState extends State<ProfileScreen> {
   final TextEditingController _PhoneController = TextEditingController();
   final TextEditingController _GitController = TextEditingController();
 
+  String? _selectedGender; // Variable para almacenar la selección de género
+
   Future<void> _pickImage() async {
     final XFile? image = await _picker.pickImage(source: ImageSource.gallery);
     setState(() {
-      if (image != null) {
-        _image = File(image.path);
-      }
+      _image = image; // Actualizamos el estado con XFile
     });
   }
 
   Future<void> _pickImageFromCamera() async {
     final XFile? image = await _picker.pickImage(source: ImageSource.camera);
     setState(() {
-      if (image != null) {
-        _image = File(image.path);
-      }
+      _image = image; // Actualizamos el estado con XFile
     });
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      // appBar: AppBar(
-      //   title: Text('Profile'),
-      //   backgroundColor: Colors.blue,
-      // ),
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(16.0),
         child: Column(
@@ -81,7 +74,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 },
                 child: CircleAvatar(
                   radius: 50,
-                  backgroundImage: _image != null ? FileImage(_image!) : null,
+                  backgroundImage: _image != null
+                      ? Image.network(_image!.path)
+                          .image // Usamos Image.network para evitar dart:io
+                      : null,
                   child: _image == null
                       ? const Icon(Icons.camera_alt, size: 50)
                       : null,
@@ -89,7 +85,25 @@ class _ProfileScreenState extends State<ProfileScreen> {
               ),
             ),
             const SizedBox(height: 20),
-            // Nombre
+            // DropdownButton para seleccionar el género
+            DropdownButton<String>(
+              value: _selectedGender,
+              hint: const Text("Seleccionar Género"),
+              items:
+                  <String>['Masculino', 'Femenino', 'Otro'].map((String value) {
+                return DropdownMenuItem<String>(
+                  value: value,
+                  child: Text(value),
+                );
+              }).toList(),
+              onChanged: (String? newValue) {
+                setState(() {
+                  _selectedGender = newValue;
+                });
+              },
+            ),
+            const SizedBox(height: 20),
+            // Campo de texto para el nombre
             TextField(
               controller: _NameController,
               decoration: const InputDecoration(
@@ -100,7 +114,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
               ),
             ),
             const SizedBox(height: 20),
-            // Correo
+            // Campo de texto para el correo
             TextField(
               controller: _EmailController,
               keyboardType: TextInputType.emailAddress,
@@ -112,7 +126,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
               ),
             ),
             const SizedBox(height: 20),
-            // Teléfono
+            // Campo de texto para el teléfono
             TextField(
               controller: _PhoneController,
               keyboardType: TextInputType.phone,
@@ -124,7 +138,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
               ),
             ),
             const SizedBox(height: 20),
-            // GitHub
+            // Campo de texto para el GitHub
             TextField(
               controller: _GitController,
               keyboardType: TextInputType.url,
@@ -142,39 +156,3 @@ class _ProfileScreenState extends State<ProfileScreen> {
     );
   }
 }
-
-
-// class ProfileScreen extends StatelessWidget {
-//   const ProfileScreen({super.key});
-
-//   @override
-//   Widget build(BuildContext context) {
-//     return Scaffold(
-//       appBar: AppBar(
-//         title: Text('Profile Screen'),
-//       ),
-//       body: Center(
-//         child: Text('Content goes here'),
-//       ),
-//       bottomNavigationBar: ConvexAppBar(
-//         style: TabStyle.react,
-//         items: [
-//           TabItem(icon: Icons.home, title: 'Home'),
-//           TabItem(icon: Icons.search, title: 'Search'),
-//           TabItem(icon: Icons.person, title: 'Profile'),
-//         ],
-//         initialActiveIndex: 2,
-//         onTap: (int index) {
-//           if (index == 2) {
-//             // Navega a ProfileScreen cuando se seleccione el icono de perfil
-//             if (ModalRoute.of(context)?.settings.name != '/profile') {
-//               Navigator.pushNamed(context, '/profile');
-//             }
-//           } else {
-//             print('Tab $index selected');
-//           }
-//         },
-//       ),
-//     );
-//   }
-// }

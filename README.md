@@ -1,5 +1,16 @@
 # progmsn2024
 
+### Practica 1: Challenge Coffe App
+Fecha de vencimiento: 15 de septiembre de 2024 23:59
+
+## Descripción
+
+Para completar la presente práctica el alumno deberá seguir los pasos que se presentan en el siguiente video, e implementar la aplicación que dentro del mismo se desarrolla.
+
+## Descripción
+
+
+---
 ### Practica 2: Screen Profile
 
 Fecha de vencimiento: 15 de septiembre de 2024, 22:59

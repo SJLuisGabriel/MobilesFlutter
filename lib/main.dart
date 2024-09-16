@@ -21,7 +21,8 @@ class MyApp extends StatelessWidget {
         builder: (context, value, Widget) {
           return MaterialApp(
             // theme: Themesettings.darkTheme(),
-            theme: value ? ThemeData.dark() : ThemeData.light(),
+            theme:
+                value ? Themesettings.darkTheme() : Themesettings.lightTheme(),
             title: 'Material App',
             home: LoginScreen(),
             routes: {
