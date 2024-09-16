@@ -1,6 +1,7 @@
 # progmsn2024
 
 ### Practica 1: Challenge Coffe App
+
 Fecha de vencimiento: 15 de septiembre de 2024 23:59
 
 ## Descripción
@@ -9,8 +10,8 @@ Para completar la presente práctica el alumno deberá seguir los pasos que se p
 
 ## Descripción
 
-
 ---
+
 ### Practica 2: Screen Profile
 
 Fecha de vencimiento: 15 de septiembre de 2024, 22:59
@@ -23,5 +24,4 @@ Esta practica es una aplicación móvil desarrollada en Flutter como parte de la
 
 - **Pantalla de Perfil**: Captura y edición de datos del perfil, incluyendo imagen, nombre completo, correo electrónico, número de teléfono y página de GitHub.
 - **Selección de Imagen**: Permite seleccionar una imagen desde la cámara o la galería del dispositivo.
-- **Interacción con Otras Aplicaciones**: Integración con otras aplicaciones para gestionar correos, llamadas y visitas a sitios web (GitHub).
 - **Widgets Personalizados**: Uso de nuevos widgets para mejorar la presentación y funcionalidad de la aplicación.
