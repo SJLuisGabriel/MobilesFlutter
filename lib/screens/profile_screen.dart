@@ -9,7 +9,7 @@ class ProfileScreen extends StatefulWidget {
 }
 
 class _ProfileScreenState extends State<ProfileScreen> {
-  XFile? _image; // Usamos XFile y evitamos dart:io
+  XFile? _image;
   final ImagePicker _picker = ImagePicker();
 
   // Controladores para los campos de texto
@@ -23,14 +23,14 @@ class _ProfileScreenState extends State<ProfileScreen> {
   Future<void> _pickImage() async {
     final XFile? image = await _picker.pickImage(source: ImageSource.gallery);
     setState(() {
-      _image = image; // Actualizamos el estado con XFile
+      _image = image;
     });
   }
 
   Future<void> _pickImageFromCamera() async {
     final XFile? image = await _picker.pickImage(source: ImageSource.camera);
     setState(() {
-      _image = image; // Actualizamos el estado con XFile
+      _image = image;
     });
   }
 
@@ -74,10 +74,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 },
                 child: CircleAvatar(
                   radius: 50,
-                  backgroundImage: _image != null
-                      ? Image.network(_image!.path)
-                          .image // Usamos Image.network para evitar dart:io
-                      : null,
+                  backgroundImage:
+                      _image != null ? Image.network(_image!.path).image : null,
                   child: _image == null
                       ? const Icon(Icons.camera_alt, size: 50)
                       : null,

@@ -68,7 +68,7 @@ class _CoffeAppScreenState extends State<CoffeAppScreen>
                 return Transform.translate(
                   offset: Offset(-200 * (1 - animation.value), 0),
                   child: Image.asset(
-                    '',
+                    'assets/p3/icono.png',
                     width: 30,
                     height: 30,
                   ),
@@ -78,12 +78,15 @@ class _CoffeAppScreenState extends State<CoffeAppScreen>
           AnimatedBuilder(
               animation: animation,
               builder: (context, snapshot) {
-                return Transform.translate(
-                  offset: Offset(200 * (1 - animation.value), 0),
-                  child: Image.asset(
-                    '',
-                    height: 30,
-                    width: 30,
+                return Padding(
+                  padding: const EdgeInsets.only(right: 17),
+                  child: Transform.translate(
+                    offset: Offset(200 * (1 - animation.value), 0),
+                    child: Image.asset(
+                      'assets/p3/menu.png',
+                      height: 30,
+                      width: 30,
+                    ),
                   ),
                 );
               })
@@ -109,7 +112,7 @@ class _CoffeAppScreenState extends State<CoffeAppScreen>
                     ? controller.reverse()
                     : controller.forward(),
                 child: Image.asset(
-                  '',
+                  'assets/p3/logo.png',
                   width: 50,
                   height: 50,
                 ),
@@ -121,13 +124,13 @@ class _CoffeAppScreenState extends State<CoffeAppScreen>
 
   Widget buildPager(Size size) {
     return Container(
-      margin: EdgeInsets.only(top: 70),
-      height: size.height - 50,
+      margin: const EdgeInsets.only(top: 80),
+      height: size.height - 10,
       child: AnimatedBuilder(
           animation: animation,
           builder: (context, snapshot) {
             return Transform.translate(
-              offset: Offset(400 * (1 - animation.value), 0),
+              offset: Offset(355 * (1 - animation.value), 0),
               child: PageView.builder(
                 controller: pageController,
                 itemCount: getDrinks().length,
@@ -141,10 +144,54 @@ class _CoffeAppScreenState extends State<CoffeAppScreen>
 
   List<Drink> getDrinks() {
     List<Drink> list = [];
-    list.add(
-        Drink('Tirami', 'Su', '', '', '', '', '', '', mBrownLight, mBrown));
-    list.add(
-        Drink('Green', 'Tea', '', '', '', '', '', '', greenLight, greenDark));
+    list.add(Drink(
+        'Cubo ',
+        '3 x 3',
+        'assets/p3/fondo 3.jpg',
+        'assets/p3/1083351.png',
+        'assets/p3/pngtree-rubik-s-cube-clipart-transparent-background-png-image_11087100.png',
+        // '',
+        // '',
+        'El clásico cubo Rubik, ideal para iniciarse en el mundo de los rompecabezas.',
+        'Easy',
+        mCaramel,
+        mDarkGray));
+    list.add(Drink(
+        'Cubo ',
+        'Megaminx',
+        'assets/p3/fondo 2.jpg',
+        'assets/p3/pngtree-rubik-s-cube-clipart-transparent-background-png-image_11087100.png',
+        'assets/p3/Cubos Rubik Yuxin Megaminx Colored CubosCubik (1)-600x600.png',
+        // '',
+        // '',
+        'Un cubo de 12 caras que ofrece un desafío mayor para los más avanzados.',
+        'Medium',
+        mTeal,
+        mDarkCyan));
+    list.add(Drink(
+        'Cubo ',
+        'Pryramix',
+        'assets/p3/fondo 5.jpg',
+        'assets/p3/pngtree-rubik-s-cube-clipart-transparent-background-png-image_11087100.png',
+        'assets/p3/piramide.webp',
+        // '',
+        // '',
+        'Rompecabezas en forma de pirámide con una dificultad media, perfecto para quienes buscan algo diferente.',
+        'Medium',
+        mYellow,
+        mOrange));
+    list.add(Drink(
+        'Cubo ',
+        '2x2',
+        'assets/p3/fondo 2.jpg',
+        'assets/p3/1083351.png',
+        'assets/p3/small.png',
+        // '',
+        // '',
+        'Una versión simplificada del cubo Rubik, fácil de resolver pero igualmente entretenida.',
+        'Easy',
+        mPurple,
+        mDarkPurple));
     return list;
   }
 
@@ -173,12 +220,12 @@ class _CoffeAppScreenState extends State<CoffeAppScreen>
 
     if (animate <= 1 && animate >= 0) {
       size = 10 + 10 * (1 - animate);
-      color = ColorTween(begin: Colors.grey, end: mAppGreen)
+      color = ColorTween(begin: Colors.grey, end: mDarkPurple)
           .transform((1 - animate))!;
     }
 
     return Container(
-      margin: EdgeInsets.all(4),
+      margin: const EdgeInsets.all(4),
       height: size,
       width: size,
       decoration:

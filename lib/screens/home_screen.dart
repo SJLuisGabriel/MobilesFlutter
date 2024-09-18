@@ -99,7 +99,7 @@ class _HomeScreenState extends State<HomeScreen> {
             ),
             ListTile(
               leading: Icon(Icons.coffee_maker),
-              title: Text('Coffee App'),
+              title: Text('Rubik App'),
               onTap: () {
                 Navigator.pop(context);
                 Navigator.push(

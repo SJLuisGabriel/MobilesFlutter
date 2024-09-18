@@ -3,6 +3,7 @@
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:progmsn2024/screens/coffe_app_screen.dart';
 import 'package:progmsn2024/screens/home_screen.dart';
 import 'package:progmsn2024/screens/login_screen.dart';
 import 'package:progmsn2024/screens/profile_screen.dart';
@@ -26,7 +27,7 @@ class MyApp extends StatelessWidget {
             title: 'Material App',
             home: LoginScreen(),
             routes: {
-              '/home': (context) => HomeScreen(),
+              '/home': (context) => CoffeAppScreen(),
               '/profile': (context) => ProfileScreen(),
             },
             debugShowCheckedModeBanner: false,

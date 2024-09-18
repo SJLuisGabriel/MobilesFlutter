@@ -8,7 +8,10 @@ Fecha de vencimiento: 15 de septiembre de 2024 23:59
 
 Para completar la presente práctica el alumno deberá seguir los pasos que se presentan en el siguiente video, e implementar la aplicación que dentro del mismo se desarrolla.
 
-## Descripción
+- **Pantalla Principal**: Una interfaz principal que muestre una lista de tarjetas, cada una representando un cubo Rubik con información y gráficos relevantes.
+- **Tarjetas de Bebidas**: Cada tarjeta debe mostrar un nombre, una descripción breve, una imagen de fondo, y una imagen superior del cubo Rubik.
+- **Animaciones**: Implementación de animaciones para la transición entre tarjetas y para los elementos dentro de cada tarjeta.
+- **Colores y Estilo**: Personalización del tema de la aplicación utilizando una paleta de colores definida, asegurando que los colores se apliquen consistentemente en toda la aplicación.
 
 ---
 

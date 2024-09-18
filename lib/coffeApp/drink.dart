@@ -6,9 +6,10 @@ class Drink {
   String backgroundImage;
   String imageTop;
   String imageSmall;
-  String imageBlur;
-  String cupImage;
+  // String imageBlur;
+  // String cupImage;
   String description;
+  String dificulty;
   Color darkcolor;
   Color lightcolor;
 
@@ -18,9 +19,10 @@ class Drink {
       this.backgroundImage,
       this.imageTop,
       this.imageSmall,
-      this.imageBlur,
-      this.cupImage,
+      // this.imageBlur,
+      // this.cupImage,
       this.description,
+      this.dificulty,
       this.darkcolor,
       this.lightcolor);
 }
