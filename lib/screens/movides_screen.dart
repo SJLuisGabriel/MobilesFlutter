@@ -1,16 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:progmsn2024/database/movies_database.dart';
 import 'package:progmsn2024/models/moviesdao.dart';
+import 'package:progmsn2024/views/movie_view.dart';
+import 'package:wolt_modal_sheet/wolt_modal_sheet.dart';
 
-class MovidesScreen extends StatefulWidget {
-  const MovidesScreen({super.key});
+class MoviesScreen extends StatefulWidget {
+  const MoviesScreen({super.key});
 
   @override
-  State<MovidesScreen> createState() => _MovidesScreenState();
+  State<MoviesScreen> createState() => _MoviesScreenState();
 }
 
-class _MovidesScreenState extends State<MovidesScreen> {
+class _MoviesScreenState extends State<MoviesScreen> {
   late MoviesDatabase moviesDB;
+
   @override
   void initState() {
     super.initState();
@@ -21,26 +24,36 @@ class _MovidesScreenState extends State<MovidesScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Movie List'),
+        title: const Text('Movies List'),
+        actions: [
+          IconButton(
+              onPressed: () {
+                WoltModalSheet.show(
+                    context: context,
+                    pageListBuilder: (context) =>
+                        [WoltModalSheetPage(child: MovieView())]);
+              },
+              icon: const Icon(Icons.add))
+        ],
       ),
       body: FutureBuilder(
           future: moviesDB.SELECT(),
-          builder: (context, AsyncSnapshot<List<MoviesDAO>> snapshot) {
+          builder: (context, AsyncSnapshot<List<MoviesDAO>?> snapshot) {
             if (snapshot.hasData) {
               return ListView.builder(
+                itemCount: snapshot.data!.length,
                 itemBuilder: (context, index) {
-                  // return MovieViewItem(
-                  //   MoviesDAO: snapshot.data![index],
-                  // );
+                  return Text(
+                      'HOla'); //MovieViewItem(moviesDAO: snapshot.data![index],);
                 },
               );
             } else {
               if (snapshot.hasError) {
-                return const Center(
-                  child: Text('Something was wrong! :)'),
+                return Center(
+                  child: Text(snapshot.error.toString()),
                 );
               } else {
-                return const Center(
+                return Center(
                   child: CircularProgressIndicator(),
                 );
               }
@@ -48,8 +61,4 @@ class _MovidesScreenState extends State<MovidesScreen> {
           }),
     );
   }
-
-  // Widget MovieViewItem() {
-  //   return Text('Movie List');
-  // }
 }

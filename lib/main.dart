@@ -1,40 +1,59 @@
 //cupeapp - para crear estructura inicial para IOS
 //mateapp - para crear estructura inicial para Android
-
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:progmsn2024/screens/theme_preference.dart';
+import 'package:progmsn2024/settings/theme_notifier.dart';
+import 'package:progmsn2024/screens/Onboarding/onboarding1.dart';
+import 'package:progmsn2024/screens/Onboarding/onboarding2.dart';
+import 'package:progmsn2024/screens/Onboarding/onboarding3.dart';
 import 'package:progmsn2024/screens/coffe_app_screen.dart';
 import 'package:progmsn2024/screens/home_screen.dart';
 import 'package:progmsn2024/screens/login_screen.dart';
+import 'package:progmsn2024/screens/movides_screen.dart';
 import 'package:progmsn2024/screens/profile_screen.dart';
-import 'package:progmsn2024/settings/global_values.dart';
-import 'package:progmsn2024/settings/theme_settings.dart';
 
 void main() => runApp(const MyApp());
 
-class MyApp extends StatelessWidget {
+class MyApp extends StatefulWidget {
   const MyApp({super.key});
 
   @override
+  State<MyApp> createState() => _MyAppState();
+}
+
+class _MyAppState extends State<MyApp> {
+  final ThemeNotifier themeNotifier = ThemeNotifier();
+
+  @override
   Widget build(BuildContext context) {
-    return ValueListenableBuilder(
-        valueListenable: GlobalValues.banThemeDark,
-        builder: (context, value, Widget) {
-          return MaterialApp(
-            // theme: Themesettings.darkTheme(),
-            theme:
-                value ? Themesettings.darkTheme() : Themesettings.lightTheme(),
-            title: 'Material App',
-            home: LoginScreen(),
-            routes: {
-              '/home': (context) => CoffeAppScreen(),
-              '/profile': (context) => ProfileScreen(),
-            },
-            debugShowCheckedModeBanner: false,
-          );
-        });
+    return ValueListenableBuilder<ThemeData>(
+      valueListenable: themeNotifier,
+      builder: (context, theme, child) {
+        return MaterialApp(
+          theme: theme,
+          title: 'Programación Móviles',
+          home: const LoginScreen(),
+          routes: {
+            '/home': (context) => const HomeScreen(),
+            '/profile': (context) => const ProfileScreen(),
+            '/db': (context) => const MoviesScreen(),
+            '/login': (context) => const LoginScreen(),
+            '/onboarding1': (context) => const OnboardingScreen1(),
+            '/onboarding2': (context) =>
+                OnboardingScreen2(themeNotifier: themeNotifier),
+            '/onboarding3': (context) => const OnboardingScreen3(),
+            '/preferencesTheme': (context) =>
+                PreferencesScreen(themeNotifier: themeNotifier),
+          },
+          debugShowCheckedModeBanner: false,
+        );
+      },
+    );
   }
 }
+
+
+
 
 // import 'package:flutter/material.dart';
 

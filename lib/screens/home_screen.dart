@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:image_picker/image_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:convex_bottom_bar/convex_bottom_bar.dart';
@@ -6,6 +8,8 @@ import 'package:progmsn2024/screens/profile_screen.dart';
 import 'package:progmsn2024/settings/colors_settings.dart';
 import 'package:flutter_expandable_fab/flutter_expandable_fab.dart';
 import 'package:progmsn2024/settings/global_values.dart';
+import 'package:flutter/cupertino.dart';
+import 'package:flutter/widgets.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -47,19 +51,21 @@ class _HomeScreenState extends State<HomeScreen> {
           IconButton(
               onPressed: () {}, icon: const Icon(Icons.access_alarm_outlined)),
           GestureDetector(
-              onTap: () {
-                _showImageOptions();
-              },
-              child: MouseRegion(
-                cursor: MouseCursor.defer,
-                child: CircleAvatar(
-                  backgroundImage:
-                      _image != null ? Image.network(_image!.path).image : null,
-                  child: _image == null
-                      ? Image.asset("assets/elephant_cthulhu_icon.png")
-                      : null,
-                ),
-              )),
+            onTap: () {
+              _showImageOptions();
+            },
+            child: MouseRegion(
+              cursor: MouseCursor.defer,
+              child: CircleAvatar(
+                backgroundImage: _image != null
+                    ? FileImage(File(_image!.path))
+                    : const AssetImage('assets/elephant_cthulhu_icon.png'),
+                child: _image == null
+                    ? Image.asset("assets/elephant_cthulhu_icon.png")
+                    : null,
+              ),
+            ),
+          ),
         ],
       ),
       body: Builder(builder: (context) {
@@ -73,45 +79,46 @@ class _HomeScreenState extends State<HomeScreen> {
             return const HomePage();
         }
       }),
-      drawer: Drawer(
-        child: ListView(
-          padding: EdgeInsets.zero,
-          children: <Widget>[
-            DrawerHeader(
-              decoration: const BoxDecoration(
-                color: Colors.blue,
-              ),
-              child: Column(
-                children: [
-                  CircleAvatar(
-                    backgroundImage: _image != null
-                        ? Image.network(_image!.path).image
-                        : const AssetImage('assets/elephant_cthulhu_icon.png'),
-                    radius: 40,
-                  ),
-                  const SizedBox(height: 10),
-                  const Text(
-                    'Luis Gabriel Sanchez Jungo',
-                    style: TextStyle(color: Colors.white, fontSize: 18),
-                  ),
-                ],
-              ),
-            ),
-            ListTile(
-              leading: Icon(Icons.coffee_maker),
-              title: Text('Rubik App'),
-              onTap: () {
-                Navigator.pop(context);
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                      builder: (context) => const CoffeAppScreen()),
-                );
-              },
-            ),
-          ],
-        ),
-      ),
+      // drawer: Drawer(
+      //   child: ListView(
+      //     padding: EdgeInsets.zero,
+      //     children: <Widget>[
+      //       DrawerHeader(
+      //         decoration: const BoxDecoration(
+      //           color: Colors.blue,
+      //         ),
+      //         child: Column(
+      //           children: [
+      //             CircleAvatar(
+      //               backgroundImage: _image != null
+      //                   ? Image.network(_image!.path).image
+      //                   : const AssetImage('assets/elephant_cthulhu_icon.png'),
+      //               radius: 40,
+      //             ),
+      //             const SizedBox(height: 10),
+      //             const Text(
+      //               'Luis Gabriel Sanchez Jungo',
+      //               style: TextStyle(color: Colors.white, fontSize: 18),
+      //             ),
+      //           ],
+      //         ),
+      //       ),
+      //       ListTile(
+      //         leading: Icon(Icons.coffee_maker),
+      //         title: Text('Rubik App'),
+      //         onTap: () {
+      //           Navigator.pop(context);
+      //           Navigator.push(
+      //             context,
+      //             MaterialPageRoute(
+      //                 builder: (context) => const CoffeAppScreen()),
+      //           );
+      //         },
+      //       ),
+      //     ],
+      //   ),
+      // ),
+      drawer: myDrawer(context, _image?.path),
       bottomNavigationBar: ConvexAppBar(
         items: const [
           TabItem(icon: Icons.home, title: 'Home'),
@@ -120,6 +127,9 @@ class _HomeScreenState extends State<HomeScreen> {
         ],
         onTap: (int i) => setState(() {
           index = i;
+          if (index == 2) {
+            _logout();
+          }
         }),
       ),
       floatingActionButtonLocation: ExpandableFab.location,
@@ -143,6 +153,11 @@ class _HomeScreenState extends State<HomeScreen> {
         ],
       ),
     );
+  }
+
+  void _logout() {
+    // Navegar a la pantalla de inicio de sesión
+    Navigator.pushReplacementNamed(context, '/login');
   }
 
   void _showImageOptions() {
@@ -173,6 +188,83 @@ class _HomeScreenState extends State<HomeScreen> {
       },
     );
   }
+
+  Widget myDrawer(BuildContext context, String? _image) {
+    return Drawer(
+      child: ListView(
+        padding: EdgeInsets.zero,
+        children: <Widget>[
+          DrawerHeader(
+            decoration: const BoxDecoration(
+              color: Color.fromARGB(255, 159, 33, 243),
+            ),
+            child: Column(
+              children: [
+                CircleAvatar(
+                  backgroundImage: _image != null
+                      ? FileImage(File(_image))
+                      : const AssetImage('assets/elephant_cthulhu_icon.png'),
+                  radius: 40,
+                ),
+                const SizedBox(height: 10),
+                const Text(
+                  'Luis Gabriel Sanchez Jungo',
+                  style: TextStyle(color: Colors.white, fontSize: 18),
+                ),
+              ],
+            ),
+          ),
+          ListTile(
+            leading: const Icon(Icons.extension),
+            title: const Text('Rubik App'),
+            onTap: () {
+              Navigator.pop(context);
+              Future.delayed(const Duration(milliseconds: 300), () {
+                Navigator.pushReplacement(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => const CoffeAppScreen(),
+                  ),
+                );
+              });
+            },
+          ),
+          ListTile(
+            onTap: () {
+              Navigator.pushNamed(context, '/db');
+            },
+            title: const Text(
+              'Movie List',
+              style: TextStyle(fontWeight: FontWeight.bold),
+            ),
+            subtitle: const Text('DatabaseMovies'),
+            leading: const Icon(Icons.movie),
+            trailing: const Icon(Icons.chevron_right),
+          ),
+          ListTile(
+            title: const Text(
+              'Item 2',
+              style: TextStyle(fontWeight: FontWeight.bold),
+            ),
+            onTap: () {
+              // Acción cuando se presiona el item
+            },
+          ),
+          ListTile(
+            onTap: () {
+              Navigator.pushNamed(context, '/preferencesTheme');
+            },
+            title: const Text(
+              'Tema',
+              style: TextStyle(fontWeight: FontWeight.bold),
+            ),
+            subtitle: const Text('Escoger el tema'),
+            leading: const Icon(Icons.brightness_6),
+          ),
+        ],
+      ),
+    );
+  }
 }
 
 class HomePage extends StatelessWidget {
@@ -193,6 +285,63 @@ class HomePage extends StatelessWidget {
       ),
     );
   }
+}
+
+Widget myDrawer(BuildContext context, String? _image) {
+  return Drawer(
+    child: ListView(
+      padding: EdgeInsets.zero,
+      children: <Widget>[
+        DrawerHeader(
+          decoration: const BoxDecoration(
+            color: Colors.blue,
+          ),
+          child: Column(
+            children: [
+              CircleAvatar(
+                backgroundImage: _image != null
+                    ? Image.network(_image).image
+                    : const AssetImage('assets/elephant_cthulhu_icon.png'),
+                radius: 40,
+              ),
+              const SizedBox(height: 10),
+              const Text(
+                'Luis Gabriel Sanchez Jungo',
+                style: TextStyle(color: Colors.white, fontSize: 18),
+              ),
+            ],
+          ),
+        ),
+        const UserAccountsDrawerHeader(
+          currentAccountPicture: CircleAvatar(
+            backgroundImage: NetworkImage('https://i.pravatar.cc/300'),
+          ),
+          accountName: Text('Rubensin Torres Frias'),
+          accountEmail: Text('ruben.torres@itcelaya.edu.mx'),
+        ),
+        ListTile(
+          leading: const Icon(Icons.coffee_maker),
+          title: const Text('Rubik App'),
+          onTap: () {
+            Navigator.pop(context);
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => const CoffeAppScreen(),
+              ),
+            );
+          },
+        ),
+        ListTile(
+          onTap: () => Navigator.pushNamed(context, '/db'),
+          title: const Text('Movies List'),
+          subtitle: const Text('Database of movies'),
+          leading: const Icon(Icons.movie),
+          trailing: const Icon(Icons.chevron_right),
+        ),
+      ],
+    ),
+  );
 }
 
 

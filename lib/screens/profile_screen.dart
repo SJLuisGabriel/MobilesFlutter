@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
+import 'dart:io'; // Importa la clase File
 
 class ProfileScreen extends StatefulWidget {
   const ProfileScreen({super.key});
@@ -74,8 +75,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 },
                 child: CircleAvatar(
                   radius: 50,
-                  backgroundImage:
-                      _image != null ? Image.network(_image!.path).image : null,
+                  backgroundImage: _image != null
+                      ? FileImage(
+                          File(_image!.path)) // Corrección: usar FileImage
+                      : null,
                   child: _image == null
                       ? const Icon(Icons.camera_alt, size: 50)
                       : null,

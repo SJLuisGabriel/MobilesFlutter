@@ -1,6 +1,5 @@
 import 'dart:io';
 
-import 'package:flutter/material.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:progmsn2024/models/moviesdao.dart';
 import 'package:sqflite/sqflite.dart';
@@ -24,22 +23,27 @@ class MoviesDatabase {
       path,
       version: VERSIONDB,
       onCreate: (db, version) {
-        String query = '''
+        String query1 = '''
           CREATE TABLE tblgenre (
             idGenre CHAR(1) PRIMARY KEY,
             dscgenre VARCHAR(50)
           );
+          ''';
 
-          Create table tblmovies (
-            idMovie INTEGER PRIMARY KEY,
-            nameMovie VARCHAR(100),
-            overView TEXT,
-            idGenre char(1),
-            imgMovie VARCHAR(150),
-            releaseDate CHAR(10),
-            CONSTRAINT fk_gen FOREIGN KEY (idGenre) REFERENCES tblgenre (idGenre)
-          );''';
-        db.execute(query);
+        db.execute(query1);
+
+        String query2 = '''
+         CREATE TABLE tblmovies(
+          idMovie INTEGER PRIMARY KEY,
+          nameMovie VARCHAR(100),
+          overview TEXT,
+          idGenre char(1),
+          imgMovie VARCHAR(150),
+          releaseDate CHAR(10),
+          CONSTRAINT fk_gen FOREIGN KEY(idGenre) REFERENCES tblgenre(idGenre)
+        );''';
+
+        db.execute(query2);
       },
     );
   }
@@ -55,13 +59,12 @@ class MoviesDatabase {
         .update(table, row, where: 'idMovie = ?', whereArgs: [row['idMovie']]);
   }
 
-  Future<int> DELETE(String table) async {
+  Future<int> DELETE(String table, int idMovie) async {
     var con = await database;
-    return await con
-        .delete(table, where: 'idMovie = ?', whereArgs: ['idMovie']);
+    return await con.delete(table, where: 'idMovie = ?', whereArgs: [idMovie]);
   }
 
-  Future<List<MoviesDAO>> SELECT() async {
+  Future<List<MoviesDAO>?> SELECT() async {
     var con = await database;
     var result = await con.query('tblmovies');
     return result.map((movie) => MoviesDAO.fromMap(movie)).toList();

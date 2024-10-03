@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -10,64 +11,102 @@ class LoginScreen extends StatefulWidget {
 class _LoginScreenState extends State<LoginScreen> {
   final conUser = TextEditingController();
   final conPwd = TextEditingController();
-  bool isLoadign = false;
+  bool isLoading = false;
+
+  Future<void> _setOnboardingSeen() async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setBool('onboardingSeen', true);
+  }
+
+  Future<bool> _getOnboardingSeen() async {
+    final prefs = await SharedPreferences.getInstance();
+    return prefs.getBool('onboardingSeen') ?? false;
+  }
 
   @override
   Widget build(BuildContext context) {
+    final screenWidth = MediaQuery.of(context).size.width;
+    final screenHeight = MediaQuery.of(context).size.height;
+
     TextFormField txtUser = TextFormField(
       keyboardType: TextInputType.emailAddress,
       controller: conUser,
-      decoration: const InputDecoration(prefixIcon: Icon(Icons.person)),
+      decoration: const InputDecoration(
+        prefixIcon: Icon(Icons.person),
+        filled: true,
+        fillColor: Colors.white,
+      ),
     );
 
     final txtPwd = TextFormField(
       keyboardType: TextInputType.text,
       obscureText: true,
       controller: conPwd,
-      decoration: const InputDecoration(prefixIcon: Icon(Icons.password)),
+      decoration: const InputDecoration(
+        prefixIcon: Icon(Icons.password),
+        filled: true,
+        fillColor: Colors.white,
+      ),
     );
 
     final ctnCredentials = Positioned(
-      bottom: 60,
+      bottom: screenHeight * 0.15,
       child: Container(
-        width: MediaQuery.of(context).size.width * .9,
-        // margin: EdgeInsets.symmetric(horizontal: 10),
+        width: screenWidth * 0.9,
         decoration: BoxDecoration(
-            color: Colors.grey, borderRadius: BorderRadius.circular(30)),
-        child: ListView(
-          shrinkWrap: true,
-          children: [txtUser, txtPwd],
+          color: Colors.grey,
+          borderRadius: BorderRadius.circular(20),
+        ),
+        padding: const EdgeInsets.all(10),
+        child: Column(
+          children: [
+            txtUser,
+            const SizedBox(height: 5),
+            txtPwd,
+          ],
         ),
       ),
     );
 
     final btnLogin = Positioned(
-        width: MediaQuery.of(context).size.width * .9,
-        bottom: 20,
-        child: ElevatedButton(
-            style: ElevatedButton.styleFrom(backgroundColor: Colors.blue[200]),
-            onPressed: () {
-              isLoadign = true;
-              setState(() {});
-              Future.delayed(const Duration(milliseconds: 4000)).then((value) =>
-                  {
-                    isLoadign = false,
-                    setState(() {}),
-                    Navigator.pushNamed(context, "/home")
-                  });
-            },
-            child: const Text('Validar Usuario')));
+      width: screenWidth * 0.9,
+      bottom: screenHeight * .06,
+      child: ElevatedButton(
+        style: ElevatedButton.styleFrom(backgroundColor: Colors.blue[200]),
+        onPressed: () async {
+          setState(() {
+            isLoading = true; // Cambiar a true antes de la operación
+          });
+
+          await Future.delayed(const Duration(seconds: 2));
+
+          bool onboardingSeen = await _getOnboardingSeen();
+          if (onboardingSeen) {
+            // Navigator.pushReplacementNamed(context, '/home');
+            Navigator.pushReplacementNamed(context, '/onboarding1');
+          } else {
+            await _setOnboardingSeen();
+            Navigator.pushReplacementNamed(context, '/onboarding1');
+          }
+
+          setState(() {
+            isLoading = false;
+          });
+        },
+        child: const Text('Validar Usuario'),
+      ),
+    );
 
     final gifLoading = Positioned(
-      top: 3,
+      top: screenHeight * 0.1,
       child: Image.asset('assets/Kunst.gif'),
       width: 100,
     );
 
     return Scaffold(
       body: Container(
-        height: MediaQuery.of(context).size.height,
-        width: MediaQuery.of(context).size.width,
+        height: screenHeight,
+        width: screenWidth,
         decoration: const BoxDecoration(
           image: DecorationImage(
             fit: BoxFit.cover,
@@ -78,15 +117,15 @@ class _LoginScreenState extends State<LoginScreen> {
           alignment: Alignment.center,
           children: [
             Positioned(
-              top: 100,
+              top: screenHeight * 0.26,
               child: Image.asset(
                 'assets/Kirby.jpg',
-                width: 300,
+                width: screenWidth * 0.8,
               ),
             ),
             ctnCredentials,
             btnLogin,
-            isLoadign ? gifLoading : Container()
+            if (isLoading) gifLoading else Container(),
           ],
         ),
       ),
