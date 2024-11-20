@@ -106,6 +106,73 @@ class PreferencesScreen extends StatelessWidget {
                 ),
               ),
             ),
+
+            const SizedBox(height: 20),
+            const Text(
+              "Selecciona la fuente:",
+              style: TextStyle(
+                fontSize: 22,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+            const SizedBox(height: 20),
+
+            // Fuente Arial
+            Card(
+              elevation: 3,
+              child: ListTile(
+                leading: const Icon(Icons.font_download, color: Colors.blue),
+                title: const Text(
+                  "Fuente Arial",
+                  style: TextStyle(fontSize: 18),
+                ),
+                trailing: ElevatedButton(
+                  onPressed: () {
+                    themeNotifier.setFont('Arial'); // Cambia la fuente a Arial
+                  },
+                  child: const Text("Seleccionar"),
+                ),
+              ),
+            ),
+
+            const SizedBox(height: 10),
+
+            // Fuente Courier New
+            Card(
+              elevation: 3,
+              child: ListTile(
+                leading: const Icon(Icons.font_download, color: Colors.blue),
+                title: const Text(
+                  "Fuente Courier New",
+                  style: TextStyle(fontSize: 18),
+                ),
+                trailing: ElevatedButton(
+                  onPressed: () {
+                    themeNotifier.setFont(
+                        'Courier New'); // Cambia la fuente a Courier New
+                  },
+                  child: const Text("Seleccionar"),
+                ),
+              ),
+            ),
+
+            const SizedBox(height: 40),
+
+            // Botón para volver a la pantalla anterior
+            Center(
+              child: ElevatedButton(
+                onPressed: () {
+                  Navigator.pop(context);
+                },
+                child: const Text(
+                  "Volver",
+                  style: TextStyle(
+                    fontSize: 18,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+              ),
+            ),
           ],
         ),
       ),

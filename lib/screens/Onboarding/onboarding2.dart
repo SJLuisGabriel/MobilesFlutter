@@ -23,7 +23,7 @@ class OnboardingScreen2 extends StatelessWidget {
             ),
             const SizedBox(height: 20),
             const Text(
-              "Selecciona el tema que prefieras.",
+              "Selecciona el tema y la fuente que prefieras.",
               style: TextStyle(fontSize: 24),
               textAlign: TextAlign.center,
             ),
@@ -47,6 +47,22 @@ class OnboardingScreen2 extends StatelessWidget {
                 themeNotifier.setTheme('custom');
               },
               child: const Text("Tema Personalizado"),
+            ),
+            const SizedBox(height: 20),
+            const Text("Selecciona la fuente:"),
+            const SizedBox(height: 10),
+            ElevatedButton(
+              onPressed: () {
+                themeNotifier.setFont('Arial');
+              },
+              child: const Text("Fuente Arial"),
+            ),
+            const SizedBox(height: 10),
+            ElevatedButton(
+              onPressed: () {
+                themeNotifier.setFont('Courier New');
+              },
+              child: const Text("Fuente Courier New"),
             ),
             const SizedBox(height: 20),
             ElevatedButton(

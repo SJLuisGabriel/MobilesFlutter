@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "854607500232",
+    "project_id": "mobilesflutter2024-80b96",
+    "storage_bucket": "mobilesflutter2024-80b96.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:854607500232:android:2fea1cdc73813fb4fb66fd",
+        "android_client_info": {
+          "package_name": "com.example.progmsn2024"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAa5sppoJS7ZGp25yvXssulJI10O7jVFkQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

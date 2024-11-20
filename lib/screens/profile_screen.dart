@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
-import 'dart:io'; // Importa la clase File
+import 'dart:io';
+import 'package:flutter_phone_direct_caller/flutter_phone_direct_caller.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class ProfileScreen extends StatefulWidget {
   const ProfileScreen({super.key});
@@ -33,6 +35,70 @@ class _ProfileScreenState extends State<ProfileScreen> {
     setState(() {
       _image = image;
     });
+  }
+
+  // Función para enviar correo
+  Future<void> _sendEmail() async {
+    final email = _EmailController.text;
+
+    final Uri emailUri = Uri(
+      scheme: 'https',
+      host: 'mail.google.com',
+      path: 'mail/?view=cm&fs=1&to=$email&su=Asunto&body=Cuerpo+del+mensaje',
+    );
+
+    try {
+      if (await canLaunchUrl(emailUri)) {
+        await launchUrl(emailUri);
+      } else {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('No se pudo abrir la página de Gmail.')),
+        );
+      }
+    } catch (e) {
+      print('Error: $e');
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+            content: Text('Error al intentar abrir Gmail en el navegador.')),
+      );
+    }
+  }
+
+  // Función para llamar por teléfono
+  Future<void> _callPhone() async {
+    final phone = _PhoneController.text.replaceAll(RegExp(r'[^0-9]'), '');
+    try {
+      await FlutterPhoneDirectCaller.callNumber(phone);
+    } catch (e) {
+      print('Error: $e');
+    }
+  }
+
+  // Función para abrir el perfil de GitHub en el navegador
+  Future<void> _openGitHub() async {
+    String githubUrl = _GitController.text.trim();
+
+    if (!githubUrl.startsWith('https://')) {
+      githubUrl = 'https://github.com/$githubUrl';
+    }
+
+    final Uri gitUri = Uri.parse(githubUrl);
+
+    try {
+      if (await canLaunchUrl(gitUri)) {
+        await launchUrl(gitUri);
+      } else {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+              content: Text('No se pudo abrir el perfil de GitHub.')),
+        );
+      }
+    } catch (e) {
+      print('Error: $e');
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Error al intentar abrir GitHub.')),
+      );
+    }
   }
 
   @override
@@ -75,10 +141,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 },
                 child: CircleAvatar(
                   radius: 50,
-                  backgroundImage: _image != null
-                      ? FileImage(
-                          File(_image!.path)) // Corrección: usar FileImage
-                      : null,
+                  backgroundImage:
+                      _image != null ? FileImage(File(_image!.path)) : null,
                   child: _image == null
                       ? const Icon(Icons.camera_alt, size: 50)
                       : null,
@@ -86,10 +150,11 @@ class _ProfileScreenState extends State<ProfileScreen> {
               ),
             ),
             const SizedBox(height: 20),
-            // DropdownButton para seleccionar el género
             DropdownButton<String>(
               value: _selectedGender,
               hint: const Text("Seleccionar Género"),
+              dropdownColor: Colors.grey[200],
+              style: const TextStyle(color: Colors.black),
               items:
                   <String>['Masculino', 'Femenino', 'Otro'].map((String value) {
                 return DropdownMenuItem<String>(
@@ -151,6 +216,24 @@ class _ProfileScreenState extends State<ProfileScreen> {
               ),
             ),
             const SizedBox(height: 20),
+            // Botones para correo, teléfono y URL
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                IconButton(
+                  icon: const Icon(Icons.email),
+                  onPressed: _sendEmail,
+                ),
+                IconButton(
+                  icon: const Icon(Icons.phone),
+                  onPressed: _callPhone,
+                ),
+                IconButton(
+                  icon: const Icon(Icons.account_box),
+                  onPressed: _openGitHub,
+                ),
+              ],
+            ),
           ],
         ),
       ),

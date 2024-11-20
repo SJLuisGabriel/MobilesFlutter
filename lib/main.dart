@@ -1,6 +1,13 @@
 //cupeapp - para crear estructura inicial para IOS
 //mateapp - para crear estructura inicial para Android
 import 'package:flutter/material.dart';
+import 'package:progmsn2024/provider/test_provider.dart';
+import 'package:progmsn2024/screens/detail_popular_screen.dart';
+import 'package:progmsn2024/screens/favorites_popular.dart';
+import 'package:progmsn2024/screens/maps.screen.dart';
+import 'package:progmsn2024/screens/movies_firebase_screen.dart';
+import 'package:progmsn2024/screens/popular_screen.dart';
+import 'package:progmsn2024/screens/register_screen.dart';
 import 'package:progmsn2024/screens/theme_preference.dart';
 import 'package:progmsn2024/settings/theme_notifier.dart';
 import 'package:progmsn2024/screens/Onboarding/onboarding1.dart';
@@ -11,8 +18,19 @@ import 'package:progmsn2024/screens/home_screen.dart';
 import 'package:progmsn2024/screens/login_screen.dart';
 import 'package:progmsn2024/screens/movides_screen.dart';
 import 'package:progmsn2024/screens/profile_screen.dart';
+import 'package:progmsn2024/network/popular_api.dart';
+import 'package:provider/provider.dart';
 
-void main() => runApp(const MyApp());
+import 'package:firebase_core/firebase_core.dart';
+import 'firebase_options.dart';
+
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
+  runApp(const MyApp());
+}
 
 class MyApp extends StatefulWidget {
   const MyApp({super.key});
@@ -26,26 +44,37 @@ class _MyAppState extends State<MyApp> {
 
   @override
   Widget build(BuildContext context) {
+    PopularApi().getPopularMovies();
+
     return ValueListenableBuilder<ThemeData>(
       valueListenable: themeNotifier,
       builder: (context, theme, child) {
-        return MaterialApp(
-          theme: theme,
-          title: 'Programación Móviles',
-          home: const LoginScreen(),
-          routes: {
-            '/home': (context) => const HomeScreen(),
-            '/profile': (context) => const ProfileScreen(),
-            '/db': (context) => const MoviesScreen(),
-            '/login': (context) => const LoginScreen(),
-            '/onboarding1': (context) => const OnboardingScreen1(),
-            '/onboarding2': (context) =>
-                OnboardingScreen2(themeNotifier: themeNotifier),
-            '/onboarding3': (context) => const OnboardingScreen3(),
-            '/preferencesTheme': (context) =>
-                PreferencesScreen(themeNotifier: themeNotifier),
-          },
-          debugShowCheckedModeBanner: false,
+        return ChangeNotifierProvider(
+          create: (context) => TestProvider(),
+          child: MaterialApp(
+            theme: theme,
+            title: 'Programación Móviles',
+            home: const LoginScreen(),
+            // home: const MoviesFirebaseScreen(),
+            routes: {
+              '/home': (context) => const HomeScreen(),
+              '/profile': (context) => const ProfileScreen(),
+              '/db': (context) => const MoviesScreen(),
+              '/login': (context) => const LoginScreen(),
+              '/onboarding1': (context) => const OnboardingScreen1(),
+              '/onboarding2': (context) =>
+                  OnboardingScreen2(themeNotifier: themeNotifier),
+              '/onboarding3': (context) => const OnboardingScreen3(),
+              '/preferencesTheme': (context) =>
+                  PreferencesScreen(themeNotifier: themeNotifier),
+              '/popular': (context) => const PopularScreen(),
+              '/details': (context) => const DetailPopularScreen(),
+              '/register': (context) => const RegisterScreen(),
+              '/favorites': (context) => const FavoritesPopular(),
+              '/maps': (context) => const MapSample(),
+            },
+            debugShowCheckedModeBanner: false,
+          ),
         );
       },
     );

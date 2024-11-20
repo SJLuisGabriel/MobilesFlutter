@@ -1,53 +1,67 @@
 import 'package:flutter/material.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+import 'package:progmsn2024/firebase/email_auth.dart';
 
-class LoginScreen extends StatefulWidget {
-  const LoginScreen({super.key});
+class RegisterScreen extends StatefulWidget {
+  const RegisterScreen({super.key});
 
   @override
-  State<LoginScreen> createState() => _LoginScreenState();
+  State<RegisterScreen> createState() => _RegisterScreenState();
 }
 
-class _LoginScreenState extends State<LoginScreen> {
+class _RegisterScreenState extends State<RegisterScreen> {
   final conUser = TextEditingController();
   final conPwd = TextEditingController();
+  final conName = TextEditingController();
+  EmailAuth auth = EmailAuth();
 
   bool isLoading = false;
-
-  Future<void> _setOnboardingSeen() async {
-    final prefs = await SharedPreferences.getInstance();
-    await prefs.setBool('onboardingSeen', true);
-  }
-
-  Future<bool> _getOnboardingSeen() async {
-    final prefs = await SharedPreferences.getInstance();
-    return prefs.getBool('onboardingSeen') ?? false;
-  }
 
   @override
   Widget build(BuildContext context) {
     final screenWidth = MediaQuery.of(context).size.width;
     final screenHeight = MediaQuery.of(context).size.height;
 
+    // Campo de texto para el nombre
+    TextFormField txtName = TextFormField(
+      keyboardType: TextInputType.text,
+      controller: conName,
+      decoration: const InputDecoration(
+        labelText: 'Nombre',
+        labelStyle: TextStyle(color: Colors.black),
+        prefixIcon: Icon(Icons.person, color: Colors.black),
+        filled: true,
+        fillColor: Colors.white,
+      ),
+      style: const TextStyle(color: Colors.black),
+    );
+
+    // Campo de texto para el usuario
     TextFormField txtUser = TextFormField(
       keyboardType: TextInputType.emailAddress,
       controller: conUser,
       decoration: const InputDecoration(
-        prefixIcon: Icon(Icons.person),
+        labelText: 'Usuario (Email)',
+        labelStyle: TextStyle(color: Colors.black),
+        prefixIcon: Icon(Icons.email, color: Colors.black),
         filled: true,
         fillColor: Colors.white,
       ),
+      style: const TextStyle(color: Colors.black),
     );
 
+    // Campo de texto para la contraseña
     final txtPwd = TextFormField(
       keyboardType: TextInputType.text,
       obscureText: true,
       controller: conPwd,
       decoration: const InputDecoration(
-        prefixIcon: Icon(Icons.password),
+        labelText: 'Contraseña',
+        labelStyle: TextStyle(color: Colors.black),
+        prefixIcon: Icon(Icons.lock, color: Colors.black),
         filled: true,
         fillColor: Colors.white,
       ),
+      style: const TextStyle(color: Colors.black),
     );
 
     final ctnCredentials = Positioned(
@@ -60,9 +74,21 @@ class _LoginScreenState extends State<LoginScreen> {
         ),
         padding: const EdgeInsets.all(10),
         child: Column(
+          crossAxisAlignment: CrossAxisAlignment
+              .start, // Para alinear los textos a la izquierda
           children: [
+            const Text(
+              'Registro de Usuario',
+              style: TextStyle(
+                fontSize: 20,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+            const SizedBox(height: 10),
+            txtName,
+            const SizedBox(height: 10),
             txtUser,
-            const SizedBox(height: 5),
+            const SizedBox(height: 10),
             txtPwd,
           ],
         ),
@@ -76,29 +102,31 @@ class _LoginScreenState extends State<LoginScreen> {
         style: ElevatedButton.styleFrom(backgroundColor: Colors.blue[200]),
         onPressed: () async {
           setState(() {
-            isLoading = true; // Cambiar a true antes de la operación
+            isLoading = true;
           });
 
-          await Future.delayed(const Duration(seconds: 2));
-
-          bool onboardingSeen = await _getOnboardingSeen();
-          if (onboardingSeen) {
-            Navigator.pushReplacementNamed(context, '/home');
-            // Navigator.pushReplacementNamed(context, '/onboarding1');
-          } else {
-            await _setOnboardingSeen();
-            Navigator.pushReplacementNamed(context, '/onboarding1');
-          }
+          final success =
+              await auth.createUser(conName.text, conUser.text, conPwd.text);
 
           setState(() {
             isLoading = false;
           });
+
+          if (success) {
+            ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                content: Text(
+                    'Usuario creado, verifica tu correo para activar la cuenta')));
+            Navigator.pushNamed(context, "/login");
+          } else {
+            ScaffoldMessenger.of(context).showSnackBar(
+                SnackBar(content: Text('Error al crear el usuario')));
+          }
         },
-        child: const Text('Validar Usuario'),
+        child: const Text('Crear Usuario'),
       ),
     );
 
-    final btnRegister = Positioned(
+    final btnCancel = Positioned(
       width: screenWidth * 0.9,
       bottom: screenHeight * .003,
       child: ElevatedButton(
@@ -109,12 +137,12 @@ class _LoginScreenState extends State<LoginScreen> {
             isLoading = true; // Cambiar a true antes de la operación
           });
           await Future.delayed(const Duration(seconds: 2));
-          Navigator.pushNamed(context, '/register');
+          Navigator.pushNamed(context, '/login');
           setState(() {
             isLoading = false;
           });
         },
-        child: const Text('Validar Usuario'),
+        child: const Text('Cancelar'),
       ),
     );
 
@@ -137,16 +165,9 @@ class _LoginScreenState extends State<LoginScreen> {
         child: Stack(
           alignment: Alignment.center,
           children: [
-            Positioned(
-              top: screenHeight * 0.26,
-              child: Image.asset(
-                'assets/Kirby.jpg',
-                width: screenWidth * 0.8,
-              ),
-            ),
             ctnCredentials,
             btnLogin,
-            btnRegister,
+            btnCancel,
             if (isLoading) gifLoading else Container(),
           ],
         ),

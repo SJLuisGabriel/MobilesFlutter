@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:image_picker/image_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:convex_bottom_bar/convex_bottom_bar.dart';
+import 'package:progmsn2024/provider/test_provider.dart';
 import 'package:progmsn2024/screens/coffe_app_screen.dart';
 import 'package:progmsn2024/screens/profile_screen.dart';
 import 'package:progmsn2024/settings/colors_settings.dart';
@@ -10,6 +11,7 @@ import 'package:flutter_expandable_fab/flutter_expandable_fab.dart';
 import 'package:progmsn2024/settings/global_values.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/widgets.dart';
+import 'package:provider/provider.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -44,6 +46,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final testProvider = Provider.of<TestProvider>(context);
     return Scaffold(
       appBar: AppBar(
         backgroundColor: ColorsSettings.navColor,
@@ -118,7 +121,7 @@ class _HomeScreenState extends State<HomeScreen> {
       //     ],
       //   ),
       // ),
-      drawer: myDrawer(context, _image?.path),
+      drawer: myDrawer(context, _image?.path, testProvider),
       bottomNavigationBar: ConvexAppBar(
         items: const [
           TabItem(icon: Icons.home, title: 'Home'),
@@ -145,6 +148,7 @@ class _HomeScreenState extends State<HomeScreen> {
             child: const Icon(Icons.light_mode),
           ),
           FloatingActionButton.small(
+            heroTag: 20,
             onPressed: () {
               GlobalValues.banThemeDark.value = true;
             },
@@ -189,7 +193,8 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
-  Widget myDrawer(BuildContext context, String? _image) {
+  Widget myDrawer(
+      BuildContext context, String? _image, TestProvider testProvider) {
     return Drawer(
       child: ListView(
         padding: EdgeInsets.zero,
@@ -207,9 +212,11 @@ class _HomeScreenState extends State<HomeScreen> {
                   radius: 40,
                 ),
                 const SizedBox(height: 10),
-                const Text(
-                  'Luis Gabriel Sanchez Jungo',
-                  style: TextStyle(color: Colors.white, fontSize: 18),
+                FittedBox(
+                  child: Text(
+                    testProvider.name,
+                    style: const TextStyle(color: Colors.white, fontSize: 18),
+                  ),
                 ),
               ],
             ),
@@ -261,6 +268,20 @@ class _HomeScreenState extends State<HomeScreen> {
             subtitle: const Text('Escoger el tema'),
             leading: const Icon(Icons.brightness_6),
           ),
+          ListTile(
+            onTap: () => Navigator.pushNamed(context, '/popular'),
+            title: const Text('Popular Movies'),
+            subtitle: const Text('API of movies'),
+            leading: const Icon(Icons.movie),
+            trailing: const Icon(Icons.chevron_right),
+          ),
+          ListTile(
+            onTap: () => Navigator.pushNamed(context, '/maps'),
+            title: const Text('Google Maps'),
+            subtitle: const Text('Map'),
+            leading: const Icon(Icons.map),
+            trailing: const Icon(Icons.chevron_right),
+          )
         ],
       ),
     );
@@ -285,63 +306,6 @@ class HomePage extends StatelessWidget {
       ),
     );
   }
-}
-
-Widget myDrawer(BuildContext context, String? _image) {
-  return Drawer(
-    child: ListView(
-      padding: EdgeInsets.zero,
-      children: <Widget>[
-        DrawerHeader(
-          decoration: const BoxDecoration(
-            color: Colors.blue,
-          ),
-          child: Column(
-            children: [
-              CircleAvatar(
-                backgroundImage: _image != null
-                    ? Image.network(_image).image
-                    : const AssetImage('assets/elephant_cthulhu_icon.png'),
-                radius: 40,
-              ),
-              const SizedBox(height: 10),
-              const Text(
-                'Luis Gabriel Sanchez Jungo',
-                style: TextStyle(color: Colors.white, fontSize: 18),
-              ),
-            ],
-          ),
-        ),
-        const UserAccountsDrawerHeader(
-          currentAccountPicture: CircleAvatar(
-            backgroundImage: NetworkImage('https://i.pravatar.cc/300'),
-          ),
-          accountName: Text('Rubensin Torres Frias'),
-          accountEmail: Text('ruben.torres@itcelaya.edu.mx'),
-        ),
-        ListTile(
-          leading: const Icon(Icons.coffee_maker),
-          title: const Text('Rubik App'),
-          onTap: () {
-            Navigator.pop(context);
-            Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (context) => const CoffeAppScreen(),
-              ),
-            );
-          },
-        ),
-        ListTile(
-          onTap: () => Navigator.pushNamed(context, '/db'),
-          title: const Text('Movies List'),
-          subtitle: const Text('Database of movies'),
-          leading: const Icon(Icons.movie),
-          trailing: const Icon(Icons.chevron_right),
-        ),
-      ],
-    ),
-  );
 }
 
 
